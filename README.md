@@ -37,6 +37,25 @@ $ ts-node src/index.ts test --arg1 my-arg
 ```
 > replace `ts-node src/index.ts` with a bin file or main file and you can use that
 
+## Global help 
+
+The commands and args decorators have strict properties for descriptions and names. These are used to generate help outputs automatically for all command or specific commands and or their children.
+
+```bash
+$ ts-node src/index.ts --help
+```
+The above will print out all help info about all commands within the container
+
+```bash
+$ ts-node src/index.ts my-command --help
+```
+The above will print out the help info about the specific `my-command` command and it's children if any
+
+```bash
+$ ts-node src/index.ts my-command child --help
+```
+The above will print out the help info for the specific `child` command within `my-command`
+
 ## Command Decorator
 
 ```ts
@@ -98,7 +117,7 @@ These are commands that are chainable from a given parent command
 ```ts
 
 @Command({
-  child: 'child',
+  name: 'child',
   description: '',
 })
 class ChildCommand extends AbstractCommand {}
@@ -106,7 +125,7 @@ class ChildCommand extends AbstractCommand {}
 @Command({
   name: 'parent',
   description: '',
-  children: [ChildCommand],
+  children: [ ChildCommand ],
 })
 class ParentCommand extends AbstractCommand {}
 
@@ -115,4 +134,55 @@ In order to call the child command, you can do so like this
 
 ```bash
 $ ts-node src/index.ts parent child
+```
+
+For the children to be found, they will need to be added to the commands property within the kli.run function
+
+```ts
+kli.run({
+  commands: [ ParentCommand, ChildCommand ],
+})
+```
+
+## Providers 
+
+Providers are classes or token based values that are sotred within the container and injected within commands
+
+```ts
+class MyProvider {
+
+}
+
+@Command({
+  name: 'test',
+  description: '',
+})
+class MyCommand extends AbstractCommand {
+  constructor(
+    @Inject('GlobalConfig') globalConfig: GobalConfig,
+    private readonly myProvider: MyProvider
+  ) {
+    super(globalConfig)
+  }
+}
+
+kli.run({
+  providers: [ MyProvider ],
+  commands: [ MyCommand ],
+})
+
+```
+
+#### Using values as providers
+
+```ts
+kli.run({
+  providers: [{
+    token: 'my-custom-provider',
+    value: {
+      myStoredProperty: 'myStoredValue',
+    },
+  }],
+  commands: [ MyCommand ],
+})
 ```
