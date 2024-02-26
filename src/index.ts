@@ -20,7 +20,6 @@ export class Kli {
 
   private async init() {
     const argv = await yargs(hideBin(process.argv)).argv
-    console.log(argv)
 
     const commandNameArgs = argv._
     const childParameters = [...commandNameArgs]
@@ -99,12 +98,8 @@ export class Kli {
 
     const command = this.container.get<AbstractCommand>(this.commandNameArgs.map(arg => arg.toString()).join(' '))
 
-    console.log('command', command)
-
     this.validateArgs(command)
     const args = this.resolveArgs(command)
-
-    console.log(this.args, Object.keys(this.args), Object.keys(this.args).includes('h'))
 
     if (Object.keys(this.args).includes('help') || Object.keys(this.args).includes('h')) command.help()
 
