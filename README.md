@@ -74,6 +74,7 @@ The above will print out the help info for the specific `child` command within `
   type: 'string', // The type, not required, only used for boolean types
   required: false, // If required, throw an exception message to user and prevent calling
   default: 'test', // If provided, this will be inputed if --arg1 is not provided
+  alias: 'a', // Shorthand name for the argument
 })
 ```
 

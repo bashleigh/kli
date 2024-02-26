@@ -33,6 +33,9 @@ export class Kli {
     this.args = args
   }
 
+  /**
+   * Creation of the container that will be used for DI of commands
+   */
   private bootstrapContainer({
     providers,
     commands,
