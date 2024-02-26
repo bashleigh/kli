@@ -10,13 +10,13 @@ export interface GlobalConfig {
 
 export abstract class AbstractCommand {
   protected readonly commandOptions: CommandOptionsInterface
-  protected readonly args?: ArgOptionsInterface[]
+  protected readonly argOptions?: ArgOptionsInterface[]
   constructor(
     @Inject('GlobalConfig')
     readonly globalConfig: GlobalConfig,
   ) {
     this.commandOptions = Reflect.getOwnMetadata(COMMAND_OPTIONS, this.constructor)
-    this.args = Reflect.getOwnMetadata(ARGUMENT_OPTIONS, this.constructor)
+    this.argOptions = Reflect.getOwnMetadata(ARGUMENT_OPTIONS, this.constructor)
   }
 
   /**
@@ -61,51 +61,39 @@ export abstract class AbstractCommand {
   /**
    * Quick boolean on whether the command has children commands
    */
-  // get isParent() {
-  //   return Object.values(this.children).length >= 1
-  // }
-
-  /**
-   * Checks if the given arguments match all required arguments
-   * @param args 
-   * @returns 
-   */
-  isRunnable(args: {[s: string]: any}) {
-    const requiredArgs = this.args?.filter(arg => arg.required)
-
-    return requiredArgs?.every(arg => args.includes(arg.name))
+  get isParent(): boolean {
+    return Boolean(this.commandOptions.children && this.commandOptions.children.length >= 1)
   }
   
   abstract run(...params: any[]): Promise<any> | any;
 
   /**
-   * Get the selected child command
-   */
-  // getSelectedChildCommand(): AbstractCommand | undefined {
-  //   if (!this.childParameter) return
-  //   return this.children[this.childParameter]
-  // }
-
-  /**
    * Function for printing the help display of the 
    */
-  // private help() {
-  //   if (this.isParent) {
-  //     const childCommand = this.getSelectedChildCommand()
-  //     const commands: AbstractCommand[] = childCommand ? [childCommand] : Object.values(this.children)
+  help() {
+    this.printConfig(this.commandOptions, this.argOptions)
 
-  //     commands.forEach(command => command.printConfig())
+    if (this.isParent) {
+      this.commandOptions.children?.forEach(child => {
+        const commandOptions = Reflect.getOwnMetadata(COMMAND_OPTIONS, child)
+        const argOptions = Reflect.getOwnMetadata(ARGUMENT_OPTIONS, child)
 
-  //     return
-  //   }
-
-  //   this.printConfig()
-  // }
+        this.printConfig(commandOptions, argOptions)
+      })
+    }
+  }
 
   /**
-   * Prints to console the commands options and configruations
+   * Prints to console the given command options and arguments
    */
-  protected printConfig() {
-    // TODO print the config of the singular command
+  protected printConfig(commandOptions: CommandOptionsInterface, argOptions?: ArgOptionsInterface[]) {
+    this.writeLn(commandOptions.name)
+    this.writeLn(commandOptions.description)
+
+    argOptions?.forEach(arg => {
+      this.writeLn(arg.name)
+      this.writeLn(`${arg.required ? '[Required] ' : ''}${arg.description}`)
+      arg.default && this.writeLn(`Default: ${arg.default}`)
+    })
   }
 }

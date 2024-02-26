@@ -75,7 +75,7 @@ export class Kli {
   protected resolveArgs(command: AbstractCommand) {
     const argOptions: ArgOptionsInterface[] = Reflect.getMetadata(ARGUMENT_OPTIONS, command.constructor)
     
-    return argOptions?.map((options) => this.args[options.name] || options.default) || []
+    return argOptions?.map((options) => this.args[options.name] || options.alias && this.args[options.alias] || options.default) || []
   }
 
   protected validateArgs(command: AbstractCommand) {
@@ -101,10 +101,13 @@ export class Kli {
 
     console.log('command', command)
 
-    // TODO validate args
     this.validateArgs(command)
     const args = this.resolveArgs(command)
 
-    command.run(...args)
+    console.log(this.args, Object.keys(this.args), Object.keys(this.args).includes('h'))
+
+    if (Object.keys(this.args).includes('help') || Object.keys(this.args).includes('h')) command.help()
+
+    else command.run(...args)
   }
 }

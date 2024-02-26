@@ -32,8 +32,14 @@ class TestCommand extends AbstractCommand {
       description: 'testing arg1',
     })
     arg1: any,
+    @Arg({
+      name: 'arg2',
+      description: 'testing alias',
+      alias: 'a',
+    })
+    arg2: any,
   ) {
-    console.log('run', this.globalConfig)
+    console.log('run', this.globalConfig, arg2)
   }
 }
 

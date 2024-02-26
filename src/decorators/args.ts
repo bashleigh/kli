@@ -8,6 +8,7 @@ export interface ArgOptionsInterface {
   type?: 'string' | 'boolean',
   required?: boolean,
   default?: any,
+  alias?: string,
 }
 
 export const Arg = (options: ArgOptionsInterface): ParameterDecorator => (target, propertyKey , parameterIndex) => {
@@ -17,6 +18,7 @@ export const Arg = (options: ArgOptionsInterface): ParameterDecorator => (target
     ...options,
     type: options.type || 'string',
     required: options.required || false,
+    default: options.default || options.type === 'boolean' && !options.default ? false : undefined
   }
 
   Reflect.defineMetadata(ARGUMENT_OPTIONS, params, target.constructor)
