@@ -18,6 +18,9 @@ export class Kli {
   private childNamedArgs: string[] = []
   private args: {[s: string]: any} = {}
 
+  /**
+   * Initiate command line values
+   */
   private async init() {
     const argv = await yargs(hideBin(process.argv)).argv
 
@@ -74,12 +77,21 @@ export class Kli {
     })
   }
 
+  /**
+   * Resolve args for given command
+   * @param command 
+   * @returns 
+   */
   protected resolveArgs(command: AbstractCommand) {
     const argOptions: ArgOptionsInterface[] = Reflect.getMetadata(ARGUMENT_OPTIONS, command.constructor)
     
     return argOptions?.map((options) => this.args[options.name] || options.alias && this.args[options.alias] || options.default) || []
   }
 
+  /**
+   * Validate args for given command 
+   * @param command
+   */
   protected validateArgs(command: AbstractCommand) {
     const argOptions: ArgOptionsInterface[] = Reflect.getMetadata(ARGUMENT_OPTIONS, command.constructor)
 
@@ -88,6 +100,9 @@ export class Kli {
     })
   }
 
+  /**
+   * init arguments, bootstrap container, find relevant command and run it
+   */
   public async run({
     providers,
     commands,
@@ -100,6 +115,11 @@ export class Kli {
     this.bootstrapContainer({ providers, commands })
 
     const command = this.container.get<AbstractCommand>(this.commandNameArgs.map(arg => arg.toString()).join(' '))
+
+    if (!command) {
+      console.log('No command found')
+      return
+    }
 
     this.validateArgs(command)
     const args = this.resolveArgs(command)

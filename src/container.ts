@@ -11,14 +11,23 @@ const isValueProvider = (provider: Provider): provider is ValueProvider => typeo
 const isNamedProvider = (provider: Provider): provider is NamedProvider => typeof provider === 'object' && Boolean(provider.token) && provider.hasOwnProperty('useClass')
 
 export class Container {
-  instances: { [s: string]: Provider } = {}
+  providers: { [s: string]: Provider } = {}
 
+  /**
+   * Add a provider to the container
+   * @param provider
+   */
   add(provider: Provider) {
-    isValueProvider(provider) || isNamedProvider(provider) ? this.instances[provider.token] = provider : this.instances[provider.name] = provider
+    isValueProvider(provider) || isNamedProvider(provider) ? this.providers[provider.token] = provider : this.providers[provider.name] = provider
   }
 
+  /**
+   * Find and resolve a provider from it's token
+   * @param token 
+   * @returns 
+   */
   get<T extends any>(token: string | Function): T {
-    const provider = this.instances[typeof token === 'function' ? token.name : token]
+    const provider = this.providers[typeof token === 'function' ? token.name : token]
 
     if (!provider) throw new Error('failed to get provider')
 

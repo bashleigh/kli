@@ -8,7 +8,7 @@
 ```ts
 @Command({
   name: 'test',
-  description: '',
+  description: 'My example command called test',
 })
 class TestCommand extends AbstractCommand {
   run(
@@ -61,7 +61,7 @@ The above will print out the help info for the specific `child` command within `
 ```ts
 @Command({
   name: 'command-name' // the sub command name for this defined command
-  description: '', // the description used for help of this particular command
+  description: 'My Command does this cool thing', // the description used for help of this particular command
   children: [], // An array of child commands for chaining such as command-name sub-command, sub-command's class with be defined here
 })
 ```
@@ -111,7 +111,7 @@ class MyCommand extends AbstractCommand {
 }
 ```
 
-## Sub commands
+## Sub (children) commands
 
 These are commands that are chainable from a given parent command
 
@@ -119,13 +119,13 @@ These are commands that are chainable from a given parent command
 
 @Command({
   name: 'child',
-  description: '',
+  description: 'The child command',
 })
 class ChildCommand extends AbstractCommand {}
 
 @Command({
   name: 'parent',
-  description: '',
+  description: 'The parent command',
   children: [ ChildCommand ],
 })
 class ParentCommand extends AbstractCommand {}
@@ -155,8 +155,8 @@ class MyProvider {
 }
 
 @Command({
-  name: 'test',
-  description: '',
+  name: 'mycommand',
+  description: 'My Command exampling how to inject custom providers',
 })
 class MyCommand extends AbstractCommand {
   constructor(
