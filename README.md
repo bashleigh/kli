@@ -1,4 +1,6 @@
-# KLI
+# General Grievous
+
+A TypeScript based command line interface framework. Designed to make creating cli tools simple.
 
 ## Install
 

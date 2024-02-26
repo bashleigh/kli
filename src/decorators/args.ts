@@ -18,7 +18,7 @@ export const Arg = (options: ArgOptionsInterface): ParameterDecorator => (target
     ...options,
     type: options.type || 'string',
     required: options.required || false,
-    default: options.default || options.type === 'boolean' && !options.default ? false : undefined
+    default: options.default ? options.default : options.type === 'boolean' && !options.default ? false : undefined
   }
 
   Reflect.defineMetadata(ARGUMENT_OPTIONS, params, target.constructor)

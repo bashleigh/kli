@@ -1,4 +1,4 @@
-import constructor from "src/types/constructor"
+import constructor from "../types/constructor"
 import { AbstractCommand } from "../abstract.command"
 
 export const COMMAND_OPTIONS = 'COMMAND_OPTIONS'
