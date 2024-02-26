@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "es6",
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "esModuleInterop": true
+  },
+  "include": ["src"],
+  "exclude": ["public", "dist", "node_modules", "src/tests/coverage"]
+}
