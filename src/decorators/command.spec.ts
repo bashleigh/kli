@@ -1,6 +1,6 @@
 import 'reflect-metadata'
-import { COMMAND_OPTIONS, Command, PARAM_TOKENS } from "./command"
-import { Inject } from "./inject"
+import { COMMAND_OPTIONS, Command, PARAM_TOKENS } from './command'
+import { Inject } from './inject'
 
 describe('Command', () => {
   it('Can define properties to class', () => {
@@ -35,7 +35,7 @@ describe('Command', () => {
     }
 
     const parameters = Reflect.getMetadata(PARAM_TOKENS, TestClass)
-    
+
     expect(parameters[0].injectToken).toBe(AnotherClass.name)
     expect(parameters[1].injectToken).toBe('my-token')
   })

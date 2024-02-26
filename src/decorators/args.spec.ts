@@ -1,6 +1,6 @@
 import 'reflect-metadata'
-import { ARGUMENT_OPTIONS, Arg } from "./args"
-import { Command } from "./command"
+import { ARGUMENT_OPTIONS, Arg } from './args'
+import { Command } from './command'
 
 describe('Args', () => {
   it('Can define args on function parameters', () => {
@@ -9,7 +9,7 @@ describe('Args', () => {
       description: 'test desc',
     })
     class TestClass {
-      run (
+      run(
         @Arg({
           name: 'arg',
           description: 'test arg',
@@ -31,7 +31,7 @@ describe('Args', () => {
       description: 'test desc',
     })
     class TestClass {
-      run (
+      run(
         @Arg({
           name: 'arg',
           description: 'test arg',
@@ -52,7 +52,7 @@ describe('Args', () => {
       description: 'test desc',
     })
     class TestClass {
-      run (
+      run(
         @Arg({
           name: 'arg',
           description: 'test arg',
@@ -73,7 +73,7 @@ describe('Args', () => {
       description: 'test desc',
     })
     class TestClass {
-      run (
+      run(
         @Arg({
           name: 'arg',
           description: 'test arg',
