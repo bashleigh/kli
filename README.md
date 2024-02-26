@@ -24,9 +24,9 @@ class TestCommand extends AbstractCommand {
   }
 }
 
-const kli = new Kli()
+const general = new Grievous()
 
-kli.run({
+general.run({
   commands: [ TestCommand ],
 })
 
@@ -82,12 +82,12 @@ The above will print out the help info for the specific `child` command within `
 
 ## Boostrapping
 
-You will need to provide all commands and desired injectable classes into the kli.run func.
+You will need to provide all commands and desired injectable classes into the grievous.run func.
 
 ```ts
-const kli = new Kli()
+const general = new Grievous()
 
-kli.run({
+general.run({
   providers: [
     MySharedProvider,
   ],
@@ -139,10 +139,10 @@ In order to call the child command, you can do so like this
 $ ts-node src/index.ts parent child
 ```
 
-For the children to be found, they will need to be added to the commands property within the kli.run function
+For the children to be found, they will need to be added to the commands property within the grievous.run function
 
 ```ts
-kli.run({
+general.run({
   commands: [ ParentCommand, ChildCommand ],
 })
 ```
@@ -169,7 +169,7 @@ class MyCommand extends AbstractCommand {
   }
 }
 
-kli.run({
+general.run({
   providers: [ MyProvider ],
   commands: [ MyCommand ],
 })
@@ -179,7 +179,7 @@ kli.run({
 #### Using values as providers
 
 ```ts
-kli.run({
+general.run({
   providers: [{
     token: 'my-custom-provider',
     value: {

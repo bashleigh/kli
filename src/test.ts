@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { AbstractCommand } from "./abstract.command";
 import { Arg, Command } from "./decorators";
-import { Kli } from './index'
+import { Grievous } from './index'
 
 @Command({
   name: 'child',
@@ -43,7 +43,7 @@ class TestCommand extends AbstractCommand {
   }
 }
 
-const kli = new Kli()
+const kli = new Grievous()
 
 kli.run({
   commands: [ TestCommand ],
