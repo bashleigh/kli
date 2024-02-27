@@ -8,6 +8,8 @@ A TypeScript based command line interface framework. Designed to make creating c
 ## Usage
 
 ```ts
+import { Command, Arg, Grievous } from 'grievous'
+
 @Command({
   name: 'test',
   description: 'My example command called test',
@@ -27,6 +29,7 @@ class TestCommand extends AbstractCommand {
 const general = new Grievous()
 
 general.run({
+  commandName: 'my-command-name',
   commands: [ TestCommand ],
 })
 
@@ -88,6 +91,7 @@ You will need to provide all commands and desired injectable classes into the gr
 const general = new Grievous()
 
 general.run({
+  commandName: 'my-command-name',
   providers: [
     MySharedProvider,
   ],
@@ -143,6 +147,7 @@ For the children to be found, they will need to be added to the commands propert
 
 ```ts
 general.run({
+  commandName: 'my-command-name',
   commands: [ ParentCommand, ChildCommand ],
 })
 ```
@@ -163,13 +168,14 @@ class MyProvider {
 class MyCommand extends AbstractCommand {
   constructor(
     @Inject('GlobalConfig') globalConfig: GobalConfig,
-    private readonly myProvider: MyProvider
+    private readonly myProvider: MyProvider,
   ) {
     super(globalConfig)
   }
 }
 
 general.run({
+  commandName: 'my-command-name',
   providers: [ MyProvider ],
   commands: [ MyCommand ],
 })
@@ -180,6 +186,7 @@ general.run({
 
 ```ts
 general.run({
+  commandName: 'my-command-name',
   providers: [{
     token: 'my-custom-provider',
     value: {
@@ -188,4 +195,29 @@ general.run({
   }],
   commands: [ MyCommand ],
 })
+```
+
+Can then be injected within providers or commands
+
+```ts
+class MyProvider {
+  constructor(
+    @Inject('my-custom-provider') private readonly customProvider: { myStoredProperty: sting },
+  ) {}
+}
+
+
+@Command({
+  name: 'mycommand',
+  description: 'My Command exampling how to inject custom providers',
+})
+class MyCommand extends AbstractCommand {
+  constructor(
+    @Inject('GlobalConfig') globalConfig: GobalConfig,
+    @Inject('my-custom-provider') private readonly customProvider: { myStoredProperty: sting },
+  ) {
+    super(globalConfig)
+  }
+}
+
 ```

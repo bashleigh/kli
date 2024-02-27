@@ -37,14 +37,16 @@ export class Grievous {
    * Creation of the container that will be used for DI of commands
    */
   private bootstrapContainer({
+    commandName,
     providers,
     commands,
   }: {
+    commandName: string,
     providers?: Provider[],
     commands: constructor<AbstractCommand>[],
   }) {
     const globalConfig: GlobalConfig = {
-      commandName: this.commandNameArgs[0].toString(),
+      commandName,
       devMode: Object.keys(this.childNamedArgs).includes('dev'),
       childParameters: this.childNamedArgs.map(param => param.toString()),
     }
@@ -101,15 +103,17 @@ export class Grievous {
    * init arguments, bootstrap container, find relevant command and run it
    */
   public async run({
+    commandName,
     providers,
     commands,
   }: {
+    commandName: string,
     providers?: Provider[],
     commands: constructor<AbstractCommand>[],
   }) {
     await this.init()
 
-    this.bootstrapContainer({ providers, commands })
+    this.bootstrapContainer({ providers, commands, commandName })
 
     const command = this.container.get<AbstractCommand>(this.commandNameArgs.map(arg => arg.toString()).join(' '))
 

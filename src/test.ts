@@ -46,5 +46,6 @@ class TestCommand extends AbstractCommand {
 const kli = new Grievous()
 
 kli.run({
+  commandName: 'test',
   commands: [ TestCommand ],
 })
