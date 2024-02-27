@@ -65,7 +65,7 @@ export class Grievous {
         useClass: command,
       })
   
-      // TODO need to make this recursive
+      // TODO need to make this multi level recursive
       commandConfig.children?.map(child => {
         const childCommandConfig = Reflect.getOwnMetadata(COMMAND_OPTIONS, child)
         this.container.add({

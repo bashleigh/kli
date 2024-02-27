@@ -1,4 +1,4 @@
-import { COMMAND_OPTIONS, CommandOptionsInterface, PARAM_TOKENS } from "./decorators"
+import { PARAM_TOKENS } from "./decorators"
 
 type ValueProvider = { token: string, value: any }
 
@@ -35,7 +35,7 @@ export class Container {
 
     const providerClass = isNamedProvider(provider) ? provider.useClass : provider
 
-    const commandInfo: CommandOptionsInterface = Reflect.getOwnMetadata(COMMAND_OPTIONS, providerClass)
+    // const commandInfo: CommandOptionsInterface = Reflect.getOwnMetadata(COMMAND_OPTIONS, providerClass)
     const paramsInfo = Reflect.getOwnMetadata(PARAM_TOKENS, providerClass)
 
     const resolvedInjectables = (paramsInfo || []).map((param: { injectToken: string}) => this.get(param.injectToken))
