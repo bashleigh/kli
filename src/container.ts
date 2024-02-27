@@ -1,10 +1,11 @@
 import { PARAM_TOKENS } from "./decorators"
+import constructor from "./types/constructor"
 
 type ValueProvider = { token: string, value: any }
 
-type NamedProvider = { token: string, useClass: Function }
+type NamedProvider = { token: string, useClass: constructor<any> }
 
-export type Provider = Function | ValueProvider | NamedProvider
+export type Provider = constructor<any> | ValueProvider | NamedProvider
 
 const isValueProvider = (provider: Provider): provider is ValueProvider => typeof provider === 'object' && Boolean(provider.token) && provider.hasOwnProperty('value')
 
@@ -26,7 +27,7 @@ export class Container {
    * @param token 
    * @returns 
    */
-  get<T extends any>(token: string | Function): T {
+  get<T extends any>(token: string | constructor<any>): T {
     const provider = this.providers[typeof token === 'function' ? token.name : token]
 
     if (!provider) throw new Error('failed to get provider')
@@ -35,18 +36,10 @@ export class Container {
 
     const providerClass = isNamedProvider(provider) ? provider.useClass : provider
 
-    // const commandInfo: CommandOptionsInterface = Reflect.getOwnMetadata(COMMAND_OPTIONS, providerClass)
     const paramsInfo = Reflect.getOwnMetadata(PARAM_TOKENS, providerClass)
 
     const resolvedInjectables = (paramsInfo || []).map((param: { injectToken: string}) => this.get(param.injectToken))
 
-    // console.log({
-    //   paramsInfo,
-    //   commandInfo,
-    //   resolvedInjectables,
-    // })
-
-    // @ts-ignore // TODO how to solve this?
     return new providerClass(...resolvedInjectables)
   }
 }
